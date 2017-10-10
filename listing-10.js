@@ -16,10 +16,14 @@ function transformData (inputDataFrame, country) {
     return inputDataFrame.where(inputRow => filterRow(inputRow, country));
 }
 
-function splitDataByCountry (inputDataFrame) {
+function getCountries (inputDataFrame) {
     return inputDataFrame
         .getSeries("country")
-        .distinct()
+        .distinct();    
+}
+
+function splitDataByCountry (inputDataFrame) {
+    return getCountries(inputDataFrame)
         .aggregate(Promise.resolve(), (prevPromise, country) => {
             return prevPromise.then(() => {
                 var outputDataFrame = transformData(inputDataFrame, country);
