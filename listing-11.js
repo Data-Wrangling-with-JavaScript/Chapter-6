@@ -1,36 +1,50 @@
 //
-// Aggregate data from multiple files.
+// Split a data file out to multiple data files where data is grouped by country.
 //
 // This example uses Data-Forge.
 //
 
 'use strict';
 
-var globby = require('globby');
-var importCsvFile = require('./toolkit/importCsvFile.js');
-var exportCsvFile = require('./toolkit/exportCsvFile.js');
+var dataForge = require('data-forge');
 
-var inputFileSpec = './data/by-country/*.csv';
-var outputFileName = './output/surveys-aggregated-from-separate-files.csv';
+var inputFileName = './data/surveys.csv';
 
-globby(inputFileSpec)
-    .then(paths => {
-        return paths.reduce((prevPromise, path) => {
-                return prevPromise.then(workingData => {
-                    return importCsvFile(path)
-                        .then(inputData => {
-                            return workingData.concat(inputData);
-                        });
-                });
-            }, Promise.resolve([]));
-    })
-    .then(aggregatedData => {
-        return exportCsvFile(outputFileName, aggregatedData);
-    })
+function filterRow (inputRow, country) {
+    return inputRow.country === country;
+}
+
+function transformData (inputDataFrame, country) {
+    return inputDataFrame.where(inputRow => filterRow(inputRow, country));
+}
+
+function getCountries (inputDataFrame) {
+    return inputDataFrame
+        .getSeries("country")
+        .distinct();    
+}
+
+function splitDataByCountry (inputDataFrame) {
+    return getCountries(inputDataFrame)
+        .aggregate(Promise.resolve(), (prevPromise, country) => {
+            return prevPromise.then(() => {
+                var outputDataFrame = transformData(inputDataFrame, country);
+                var outputFileName = './data/by-country/' + country + '.csv';
+                console.log('>> ' + outputFileName);
+                return outputDataFrame
+                    .asCSV()
+                    .writeFile(outputFileName);
+            });
+        });
+}
+
+dataForge.readFile(inputFileName)
+    .parseCSV()
+    .then(splitDataByCountry)
     .then(() => {
-        console.log("Done!");
+        console.log('Done!');
     })
     .catch(err => {
-        console.error("An error occurred.");
-        console.error(err);
-    })
+        console.error('Error!');
+        console.error(err && err.stack || err);
+    });
