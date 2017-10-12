@@ -12,13 +12,14 @@ var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-no-reef_type.csv';
 
+function filterColumn (inputRow) {
+    var outputRow = extend({}, inputRow);
+    delete outputRow.reef_type;
+    return outputRow;      
+}
+
 function transformData (inputData) {
-    return inputData
-            .map(inputRow => {
-                var outputRow = extend({}, inputRow);
-                delete outputRow.reef_type;
-                return outputRow;   
-            });
+    return inputData.map(filterColumn);
 }
 
 importCsvFile(inputFileName)

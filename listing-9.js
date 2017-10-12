@@ -17,7 +17,9 @@ function transformData (inputDataFrame) {
         .select(group => {
             return {
                 reef_name: group.first().reef_name,
-                transects_length: group.select(row => row.transects_length).sum(),
+                transects_length: group
+                    .select(row => row.transects_length)
+                    .sum(),
             };
         })
         .inflate();
