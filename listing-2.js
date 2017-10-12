@@ -14,8 +14,9 @@ var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 
 function fixRow (inputRow) {
     var outputRow = extend({}, inputRow);
-    outputRow.start_datetime = moment(inputRow.start_datetime, importDateFormat).toDate();
-    outputRow.end_datetime = moment(inputRow.end_datetime, importDateFormat).toDate();
+    //
+    // TODO: Your code here to fix the row of data.
+    //
     return outputRow;
 }
 
@@ -23,13 +24,10 @@ function transformData (inputData) {
     return inputData.map(fixRow);
 }
 
-importCsvFile('./data/surveys.csv')
+importCsvFile(inputFileName)
     .then(inputData => {
         var outputData = transformData(inputData);
-        return exportCsvFile(
-            './output/surveys-with-fixed-dates.csv', 
-            outputData
-        );
+        return exportCsvFile(outputFileName, outputData);
     })
     .then(() => {
         console.log('Done!');
