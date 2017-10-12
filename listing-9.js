@@ -7,6 +7,8 @@
 'use strict';
 
 var dataForge = require('data-forge');
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-aggregated.csv';
 
 function transformData (inputDataFrame) {
     return inputDataFrame
@@ -21,13 +23,13 @@ function transformData (inputDataFrame) {
         .inflate();
 }
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(inputDataFrame => {
         var outputDataFrame = transformData(inputDataFrame);
         return outputDataFrame
             .asCSV()
-            .writeFile('./output/surveys-aggregated.csv');
+            .writeFile(outputFileName);
     })
     .then(() => {
         console.log('Done!');

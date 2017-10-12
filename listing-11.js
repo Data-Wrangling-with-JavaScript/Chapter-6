@@ -10,7 +10,10 @@ var globby = require('globby');
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-globby('./data/by-country/*.csv')
+var inputFileSpec = './data/by-country/*.csv';
+var outputFileName = './output/surveys-aggregated-from-separate-files.csv';
+
+globby(inputFileSpec)
     .then(paths => {
         return paths.reduce((prevPromise, path) => {
                 return prevPromise.then(workingData => {
@@ -22,7 +25,7 @@ globby('./data/by-country/*.csv')
             }, Promise.resolve([]));
     })
     .then(aggregatedData => {
-        return exportCsvFile('./output/surveys-aggregated-from-separate-files.csv', aggregatedData);
+        return exportCsvFile(outputFileName, aggregatedData);
     })
     .then(() => {
         console.log("Done!");

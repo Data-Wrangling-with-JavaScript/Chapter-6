@@ -9,6 +9,8 @@ var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
 var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-with-no-reef_type.csv';
 
 function transformData (inputData) {
     return inputData
@@ -19,10 +21,10 @@ function transformData (inputData) {
             });
 }
 
-importCsvFile('./data/surveys.csv')
+importCsvFile(inputFileName)
     .then(inputData => {
         var outputData = transformData(inputData);
-        return exportCsvFile('./output/surveys-with-no-reef_type.csv', outputData)
+        return exportCsvFile(outputFileName, outputData)
     })
     .then(() => {
         console.log('Done!');

@@ -10,18 +10,20 @@
 var dataForge = require('data-forge');
 
 var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-with-fixed-dates-using-data-forge.csv';
 
 function transformData (inputDataFrame) {
     return inputDataFrame.parseDates(["start_datetime", "end_datetime"], importDateFormat);
 }
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(inputDataFrame => {
         var outputDataFrame = transformData(inputDataFrame);
         return outputDataFrame
             .asCSV()
-            .writeFile('./output/surveys-with-fixed-dates-using-data-forge.csv');
+            .writeFile(outputFileName);
     })
     .then(() => {
         console.log('Done!');

@@ -8,6 +8,8 @@
 'use strict';
 
 var dataForge = require('data-forge');
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-but-only-Australia-using-data-forge.csv';
 
 function filterRow (inputRow) {
     return inputRow.country === 'Australia';
@@ -17,14 +19,14 @@ function transformData (inputDataFrame) {
     return inputDataFrame.where(filterRow);
 }
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(inputDataFrame => {
         var outputDataFrame = transformData(inputDataFrame);
 
         return outputDataFrame
             .asCSV()
-            .writeFile('./output/surveys-but-only-Australia-using-data-forge.csv');
+            .writeFile(outputFileName);
     })
     .then(() => {
         console.log('Done!');

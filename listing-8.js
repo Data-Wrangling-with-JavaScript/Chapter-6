@@ -7,19 +7,21 @@
 'use strict';
 
 var dataForge = require('data-forge');
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-with-no-reef_type-using-data-forge.csv';
 
 function transformData (inputDataFrame) {
     return inputDataFrame.dropSeries("reef_type");
 }
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(inputDataFrame => {
         var outputDataFrame = transformData(inputDataFrame);
 
         return outputDataFrame
             .asCSV()
-            .writeFile('./output/surveys-with-no-reef_type-using-data-forge.csv');
+            .writeFile(outputFileName);
     })
     .then(() => {
         console.log('Done!');

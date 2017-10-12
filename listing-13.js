@@ -9,8 +9,10 @@ var dataForge = require('data-forge');
 var moment = require('moment');
 
 var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/data-pipeline-output.csv';
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(dataFrame => {
         return dataFrame.dropSeries(["exp_id", "dive_observations", "obs_topography"])
@@ -25,7 +27,7 @@ dataForge.readFile('./data/surveys.csv')
             }))
             .inflate()
             .asCSV()
-            .writeFile('./output/data-pipeline-output.csv');
+            .writeFile(outputFileName);
     })
     .then(() => {
         console.log("Done!");

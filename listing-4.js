@@ -9,6 +9,8 @@ var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
 var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var inputFileName = './data/surveys.csv';
+var outputFileName = './output/surveys-but-only-Australia.csv';
 
 function filterRow (inputRow) {
     return inputRow.country === 'Australia';
@@ -18,11 +20,11 @@ function transformData (inputData) {
     return inputData.filter(filterRow);
 };
 
-importCsvFile('./data/surveys.csv')
+importCsvFile(inputFileName)
     .then(inputData => {
         var outputData = transformData(inputData);
 
-        return exportCsvFile('./output/surveys-but-only-Australia.csv', outputData)
+        return exportCsvFile(outputFileName, outputData)
     })
     .then(() => {
         console.log('Done!');

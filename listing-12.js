@@ -8,6 +8,8 @@
 
 var dataForge = require('data-forge');
 
+var inputFileName = './data/surveys.csv';
+
 function filterRow (inputRow, country) {
     return inputRow.country === country;
 }
@@ -27,16 +29,16 @@ function splitDataByCountry (inputDataFrame) {
         .aggregate(Promise.resolve(), (prevPromise, country) => {
             return prevPromise.then(() => {
                 var outputDataFrame = transformData(inputDataFrame, country);
-                var outputPath = './data/by-country/' + country + '.csv';
-                console.log('>> ' + outputPath);
+                var outputFileName = './data/by-country/' + country + '.csv';
+                console.log('>> ' + outputFileName);
                 return outputDataFrame
                     .asCSV()
-                    .writeFile(outputPath);
+                    .writeFile(outputFileName);
             });
         });
 }
 
-dataForge.readFile('./data/surveys.csv')
+dataForge.readFile(inputFileName)
     .parseCSV()
     .then(splitDataByCountry)
     .then(() => {
