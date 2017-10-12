@@ -1,39 +1,48 @@
 //
-// Example Data-Forge data pipeline.
+// Split a data file out to multiple data files where data is grouped by country.
 //
-
+// This example uses Data-Forge.
+//
 
 'use strict';
 
 var dataForge = require('data-forge');
-var moment = require('moment');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+function filterRow (inputRow, country) {
+    return inputRow.country === country;
+}
+
+function transformData (inputDataFrame, country) {
+    return inputDataFrame.where(inputRow => filterRow(inputRow, country));
+}
+
+function getCountries (inputDataFrame) {
+    return inputDataFrame
+        .getSeries("country")
+        .distinct();    
+}
+
+function splitDataByCountry (inputDataFrame) {
+    return getCountries(inputDataFrame)
+        .aggregate(Promise.resolve(), (prevPromise, country) => {
+            return prevPromise.then(() => {
+                var outputDataFrame = transformData(inputDataFrame, country);
+                var outputPath = './data/by-country/' + country + '.csv';
+                console.log('>> ' + outputPath);
+                return outputDataFrame
+                    .asCSV()
+                    .writeFile(outputPath);
+            });
+        });
+}
 
 dataForge.readFile('./data/surveys.csv')
     .parseCSV()
-    .then(dataFrame => {
-        return dataFrame.dropSeries(["exp_id", "dive_observations", "obs_topography"])
-            .parseDates(["start_datetime", "end_datetime"], importDateFormat)
-            .where(row => moment(row.start_datetime).year() === 2014)
-            .parseFloats("dive_temperature")
-            .where(row => row.dive_temperature !== 0)
-            .groupBy(row => row.country)
-            .select(group => ({
-                country: group.first().country,
-                dive_temperature: group.select(row => row.dive_temperature).average()
-            }))
-            .inflate()
-            .asCSV()
-            .writeFile('./output/data-pipeline-output.csv');
-    })
+    .then(splitDataByCountry)
     .then(() => {
-        console.log("Done!");
+        console.log('Done!');
     })
     .catch(err => {
-        console.error("An error occured");
-        console.error(err);
+        console.error('Error!');
+        console.error(err && err.stack || err);
     });
-
-
-

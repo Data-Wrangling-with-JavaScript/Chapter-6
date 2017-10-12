@@ -1,48 +1,33 @@
 //
-// Split a data file out to multiple data files where data is grouped by country.
+// Aggregate data from multiple files.
 //
 // This example uses Data-Forge.
 //
 
 'use strict';
 
-var dataForge = require('data-forge');
+var globby = require('globby');
+var importCsvFile = require('./toolkit/importCsvFile.js');
+var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-function filterRow (inputRow, country) {
-    return inputRow.country === country;
-}
-
-function transformData (inputDataFrame, country) {
-    return inputDataFrame.where(inputRow => filterRow(inputRow, country));
-}
-
-function getCountries (inputDataFrame) {
-    return inputDataFrame
-        .getSeries("country")
-        .distinct();    
-}
-
-function splitDataByCountry (inputDataFrame) {
-    return getCountries(inputDataFrame)
-        .aggregate(Promise.resolve(), (prevPromise, country) => {
-            return prevPromise.then(() => {
-                var outputDataFrame = transformData(inputDataFrame, country);
-                var outputPath = './data/by-country/' + country + '.csv';
-                console.log('>> ' + outputPath);
-                return outputDataFrame
-                    .asCSV()
-                    .writeFile(outputPath);
-            });
-        });
-}
-
-dataForge.readFile('./data/surveys.csv')
-    .parseCSV()
-    .then(splitDataByCountry)
+globby('./data/by-country/*.csv')
+    .then(paths => {
+        return paths.reduce((prevPromise, path) => {
+                return prevPromise.then(workingData => {
+                    return importCsvFile(path)
+                        .then(inputData => {
+                            return workingData.concat(inputData);
+                        });
+                });
+            }, Promise.resolve([]));
+    })
+    .then(aggregatedData => {
+        return exportCsvFile('./output/surveys-aggregated-from-separate-files.csv', aggregatedData);
+    })
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
-        console.error(err && err.stack || err);
-    });
+        console.error("An error occurred.");
+        console.error(err);
+    })

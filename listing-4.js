@@ -1,30 +1,28 @@
 //
-// Example that imports a CSV file, fixes date/time values in each row and exporting a new CSV file.
-// Date/times are fixed by encoding in UTC so that the correct timezone is preserved.
-//
-// This example uses Data-Forge.
+// This example imports a CSV file, filters out any row that is not associated with Australia and 
+// exports a new CSV file.
 //
 
 'use strict';
 
-var dataForge = require('data-forge');
+var importCsvFile = require('./toolkit/importCsvFile.js');
+var exportCsvFile = require('./toolkit/exportCsvFile.js');
+
+var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 
 function filterRow (inputRow) {
     return inputRow.country === 'Australia';
 }
 
-function transformData (inputDataFrame) {
-    return inputDataFrame.where(filterRow);
-}
+function transformData (inputData) {
+    return inputData.filter(filterRow);
+};
 
-dataForge.readFile('./data/surveys.csv')
-    .parseCSV()
-    .then(inputDataFrame => {
-        var outputDataFrame = transformData(inputDataFrame);
+importCsvFile('./data/surveys.csv')
+    .then(inputData => {
+        var outputData = transformData(inputData);
 
-        return outputDataFrame
-            .asCSV()
-            .writeFile('./output/surveys-but-only-Australia-using-data-forge.csv');
+        return exportCsvFile('./output/surveys-but-only-Australia.csv', outputData)
     })
     .then(() => {
         console.log('Done!');

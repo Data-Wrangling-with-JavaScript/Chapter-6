@@ -26,7 +26,10 @@ function transformData (inputData) {
 importCsvFile('./data/surveys.csv')
     .then(inputData => {
         var outputData = transformData(inputData);
-        return exportCsvFile('./output/surveys-with-fixed-dates.csv', outputData)
+        return exportCsvFile(
+            './output/surveys-with-fixed-dates.csv', 
+            outputData
+        );
     })
     .then(() => {
         console.log('Done!');
