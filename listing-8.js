@@ -9,25 +9,17 @@
 var dataForge = require('data-forge');
 
 function transformData (inputDataFrame) {
-    return inputDataFrame
-        .parseFloats("transects_length")
-        .groupBy(inputRow => inputRow.reef_name)
-        .select(group => {
-            return {
-                reef_name: group.first().reef_name,
-                transects_length: group.select(row => row.transects_length).sum(),
-            };
-        })
-        .inflate();
+    return inputDataFrame.dropSeries("reef_type");
 }
 
 dataForge.readFile('./data/surveys.csv')
     .parseCSV()
     .then(inputDataFrame => {
         var outputDataFrame = transformData(inputDataFrame);
+
         return outputDataFrame
             .asCSV()
-            .writeFile('./output/surveys-aggregated.csv');
+            .writeFile('./output/surveys-with-no-reef_type-using-data-forge.csv');
     })
     .then(() => {
         console.log('Done!');

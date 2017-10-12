@@ -1,33 +1,38 @@
 //
-// Aggregate data from multiple files.
+// This example imports a CSV file, filters out an entire column and exports a new CSV file.
 //
 // This example uses Data-Forge.
 //
 
 'use strict';
 
-var globby = require('globby');
-var importCsvFile = require('./toolkit/importCsvFile.js');
-var exportCsvFile = require('./toolkit/exportCsvFile.js');
+var dataForge = require('data-forge');
 
-globby('./data/by-country/*.csv')
-    .then(paths => {
-        return paths.reduce((prevPromise, path) => {
-                return prevPromise.then(workingData => {
-                    return importCsvFile(path)
-                        .then(inputData => {
-                            return workingData.concat(inputData);
-                        });
-                });
-            }, Promise.resolve([]));
-    })
-    .then(aggregatedData => {
-        return exportCsvFile('./output/surveys-aggregated-from-separate-files.csv', aggregatedData);
+function transformData (inputDataFrame) {
+    return inputDataFrame
+        .parseFloats("transects_length")
+        .groupBy(inputRow => inputRow.reef_name)
+        .select(group => {
+            return {
+                reef_name: group.first().reef_name,
+                transects_length: group.select(row => row.transects_length).sum(),
+            };
+        })
+        .inflate();
+}
+
+dataForge.readFile('./data/surveys.csv')
+    .parseCSV()
+    .then(inputDataFrame => {
+        var outputDataFrame = transformData(inputDataFrame);
+        return outputDataFrame
+            .asCSV()
+            .writeFile('./output/surveys-aggregated.csv');
     })
     .then(() => {
-        console.log("Done!");
+        console.log('Done!');
     })
     .catch(err => {
-        console.error("An error occurred.");
-        console.error(err);
-    })
+        console.error('Error!');
+        console.error(err && err.stack || err);
+    });
