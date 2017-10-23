@@ -14,7 +14,12 @@ var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates-using-data-forge.csv';
 
 function transformData (inputDataFrame) {
-    return inputDataFrame.parseDates(["start_datetime", "end_datetime"], importDateFormat);
+    return inputDataFrame.parseDates([
+            "start_datetime", 
+            "end_datetime"
+            ], 
+            importDateFormat
+        );
 }
 
 dataForge.readFile(inputFileName)

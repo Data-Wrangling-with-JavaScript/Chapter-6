@@ -15,7 +15,9 @@ function filterRow (inputRow, country) {
 }
 
 function transformData (inputDataFrame, country) {
-    return inputDataFrame.where(inputRow => filterRow(inputRow, country));
+    return inputDataFrame.where(inputRow => {
+            return filterRow(inputRow, country);
+        });
 }
 
 function getCountries (inputDataFrame) {
@@ -28,8 +30,12 @@ function splitDataByCountry (inputDataFrame) {
     return getCountries(inputDataFrame)
         .aggregate(Promise.resolve(), (prevPromise, country) => {
             return prevPromise.then(() => {
-                var outputDataFrame = transformData(inputDataFrame, country);
-                var outputFileName = './data/by-country/' + country + '.csv';
+                var outputDataFrame = transformData(
+                        inputDataFrame, 
+                        country
+                    );
+                var outputFileName = './data/by-country/' + 
+                    country + '.csv';
                 console.log('>> ' + outputFileName);
                 return outputDataFrame
                     .asCSV()

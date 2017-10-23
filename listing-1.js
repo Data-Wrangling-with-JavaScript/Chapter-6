@@ -14,15 +14,19 @@ var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates.csv';
 
-function fixRow (inputRow) {
+function parseDate (inputDate) {
+    return moment(inputDate, importDateFormat).toDate();
+}
+
+function transformRow (inputRow) {
     var outputRow = extend({}, inputRow);
-    outputRow.start_datetime = moment(inputRow.start_datetime, importDateFormat).toDate();
-    outputRow.end_datetime = moment(inputRow.end_datetime, importDateFormat).toDate();
+    outputRow.start_datetime = parseDate(inputRow.start_datetime);
+    outputRow.end_datetime = parseDate(inputRow.end_datetime);
     return outputRow;
 }
 
 function transformData (inputData) {
-    return inputData.map(fixRow);
+    return inputData.map(transformRow);
 }
 
 importCsvFile(inputFileName)

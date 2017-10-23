@@ -33,4 +33,4 @@ globby(inputFileSpec)
     .catch(err => {
         console.error("An error occurred.");
         console.error(err);
-    })
+    });

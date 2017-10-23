@@ -14,7 +14,7 @@ var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates.csv';
 
-function fixRow (inputRow) {
+function transformRow (inputRow) {
     var outputRow = extend({}, inputRow);
     //
     // TODO: Your code here to fix the row of data.
@@ -23,7 +23,7 @@ function fixRow (inputRow) {
 }
 
 function transformData (inputData) {
-    return inputData.map(fixRow);
+    return inputData.map(transformRow);
 }
 
 importCsvFile(inputFileName)
