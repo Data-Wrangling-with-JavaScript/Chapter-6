@@ -8,18 +8,17 @@ var extend = require('extend');
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-no-reef_type.csv';
 
-function filterColumn (inputRow) {
+function transformRow (inputRow) {
     var outputRow = extend({}, inputRow);
     delete outputRow.reef_type;
     return outputRow;      
 }
 
 function transformData (inputData) {
-    return inputData.map(filterColumn);
+    return inputData.map(transformRow);
 }
 
 importCsvFile(inputFileName)

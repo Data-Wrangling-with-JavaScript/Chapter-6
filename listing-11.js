@@ -34,7 +34,7 @@ function splitDataByCountry (inputDataFrame) {
                         inputDataFrame, 
                         country
                     );
-                var outputFileName = './data/by-country/' + 
+                var outputFileName = './output/by-country/' + 
                     country + '.csv';
                 console.log('>> ' + outputFileName);
                 return outputDataFrame

@@ -8,7 +8,6 @@
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-but-only-Australia.csv';
 

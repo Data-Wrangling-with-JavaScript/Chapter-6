@@ -10,18 +10,18 @@ var extend = require('extend');
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var importDateFormat = "YYYY-MM-DD HH:mm";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates.csv';
 
-function parseDate (inputDate) {
-    return moment(inputDate, importDateFormat).toDate();
+function parseDate (inputDate, timezoneOffset) {
+    return moment(inputDate, importDateFormat).utcOffset(timezoneOffset).toDate();
 }
 
 function transformRow (inputRow) {
     var outputRow = extend({}, inputRow);
-    outputRow.start_datetime = parseDate(inputRow.start_datetime);
-    outputRow.end_datetime = parseDate(inputRow.end_datetime);
+    outputRow.start_datetime = parseDate(inputRow.start_datetime, inputRow.timezone);
+    outputRow.end_datetime = parseDate(inputRow.end_datetime, inputRow.timezone);
     return outputRow;
 }
 

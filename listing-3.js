@@ -7,19 +7,28 @@
 
 'use strict';
 
+var moment = require('moment');
+var extend = require('extend');
 var dataForge = require('data-forge');
+var extend = require('extend');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
+var importDateFormat = "YYYY-MM-DD HH:mm";
 var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates-using-data-forge.csv';
 
+function parseDate (inputDate, timezoneOffset) {
+    return moment(inputDate, importDateFormat).utcOffset(timezoneOffset).toDate();
+}
+
+function transformRow (inputRow) {
+    var outputRow = extend({}, inputRow);
+    outputRow.start_datetime = parseDate(inputRow.start_datetime, inputRow.timezone);
+    outputRow.end_datetime = parseDate(inputRow.end_datetime, inputRow.timezone);
+    return outputRow;
+}
+
 function transformData (inputDataFrame) {
-    return inputDataFrame.parseDates([
-            "start_datetime", 
-            "end_datetime"
-            ], 
-            importDateFormat
-        );
+    return inputDataFrame.select(transformRow);
 }
 
 dataForge.readFile(inputFileName)
