@@ -8,9 +8,7 @@
 'use strict';
 
 var moment = require('moment');
-var extend = require('extend');
 var dataForge = require('data-forge');
-var extend = require('extend');
 
 var importDateFormat = "YYYY-MM-DD HH:mm";
 var inputFileName = './data/surveys.csv';
@@ -21,7 +19,7 @@ function parseDate (inputDate, timezoneOffset) {
 }
 
 function transformRow (inputRow) {
-    var outputRow = extend({}, inputRow);
+    var outputRow = Object.assign({}, inputRow);
     outputRow.start_datetime = parseDate(inputRow.start_datetime, inputRow.timezone);
     outputRow.end_datetime = parseDate(inputRow.end_datetime, inputRow.timezone);
     return outputRow;

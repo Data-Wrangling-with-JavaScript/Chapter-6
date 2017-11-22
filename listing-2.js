@@ -6,7 +6,6 @@
 'use strict';
 
 var moment = require('moment');
-var extend = require('extend');
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
@@ -14,7 +13,7 @@ var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-fixed-dates.csv';
 
 function transformRow (inputRow) {
-    var outputRow = extend({}, inputRow);
+    var outputRow = Object.assign({}, inputRow);
     //
     // TODO: Your code here to fix the row of data.
     //

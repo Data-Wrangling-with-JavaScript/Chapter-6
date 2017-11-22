@@ -4,7 +4,6 @@
 
 'use strict';
 
-var extend = require('extend');
 var importCsvFile = require('./toolkit/importCsvFile.js');
 var exportCsvFile = require('./toolkit/exportCsvFile.js');
 
@@ -12,7 +11,7 @@ var inputFileName = './data/surveys.csv';
 var outputFileName = './output/surveys-with-no-reef_type.csv';
 
 function transformRow (inputRow) {
-    var outputRow = extend({}, inputRow);
+    var outputRow = Object.assign({}, inputRow);
     delete outputRow.reef_type;
     return outputRow;      
 }
