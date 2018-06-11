@@ -6,9 +6,9 @@
 
 'use strict';
 
-var dataForge = require('data-forge');
-var inputFileName = './data/surveys.csv';
-var outputFileName = './output/surveys-with-no-reef_type-using-data-forge.csv';
+const dataForge = require('data-forge');
+const inputFileName = './data/surveys.csv';
+const outputFileName = './output/surveys-with-no-reef_type-using-data-forge.csv';
 
 function transformData (inputDataFrame) {
     return inputDataFrame.dropSeries("reef_type");
@@ -17,7 +17,7 @@ function transformData (inputDataFrame) {
 dataForge.readFile(inputFileName)
     .parseCSV()
     .then(inputDataFrame => {
-        var outputDataFrame = transformData(inputDataFrame);
+        const outputDataFrame = transformData(inputDataFrame);
 
         return outputDataFrame
             .asCSV()

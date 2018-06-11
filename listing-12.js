@@ -5,12 +5,12 @@
 
 'use strict';
 
-var dataForge = require('data-forge');
-var moment = require('moment');
+const dataForge = require('data-forge');
+const moment = require('moment');
 
-var importDateFormat = "YYYY-MM-DD HH:mm:ss";
-var inputFileName = './data/surveys.csv';
-var outputFileName = './output/data-pipeline-output.csv';
+const importDateFormat = "YYYY-MM-DD HH:mm:ss";
+const inputFileName = './data/surveys.csv';
+const outputFileName = './output/data-pipeline-output.csv';
 
 dataForge.readFile(inputFileName)
     .parseCSV()

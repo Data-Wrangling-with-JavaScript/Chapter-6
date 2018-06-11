@@ -5,20 +5,20 @@
 
 'use strict';
 
-var moment = require('moment');
-var importCsvFile = require('./toolkit/importCsvFile.js');
-var exportCsvFile = require('./toolkit/exportCsvFile.js');
+const moment = require('moment');
+const importCsvFile = require('./toolkit/importCsvFile.js');
+const exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var importDateFormat = "YYYY-MM-DD HH:mm";
-var inputFileName = './data/surveys.csv';
-var outputFileName = './output/surveys-with-fixed-dates.csv';
+const importDateFormat = "YYYY-MM-DD HH:mm";
+const inputFileName = './data/surveys.csv';
+const outputFileName = './output/surveys-with-fixed-dates.csv';
 
 function parseDate (inputDate, timezoneOffset) {
     return moment(inputDate, importDateFormat).utcOffset(timezoneOffset).toDate();
 }
 
 function transformRow (inputRow) {
-    var outputRow = Object.assign({}, inputRow);
+    const outputRow = Object.assign({}, inputRow);
     outputRow.start_datetime = parseDate(inputRow.start_datetime, inputRow.timezone);
     outputRow.end_datetime = parseDate(inputRow.end_datetime, inputRow.timezone);
     return outputRow;
@@ -30,7 +30,7 @@ function transformData (inputData) {
 
 importCsvFile(inputFileName)
     .then(inputData => {
-        var outputData = transformData(inputData);
+        const outputData = transformData(inputData);
         return exportCsvFile(outputFileName, outputData);
     })
     .then(() => {

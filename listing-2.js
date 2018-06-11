@@ -5,15 +5,15 @@
 
 'use strict';
 
-var moment = require('moment');
-var importCsvFile = require('./toolkit/importCsvFile.js');
-var exportCsvFile = require('./toolkit/exportCsvFile.js');
+const moment = require('moment');
+const importCsvFile = require('./toolkit/importCsvFile.js');
+const exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var inputFileName = './data/surveys.csv';
-var outputFileName = './output/surveys-with-fixed-dates.csv';
+const inputFileName = './data/surveys.csv';
+const outputFileName = './output/surveys-with-fixed-dates.csv';
 
 function transformRow (inputRow) {
-    var outputRow = Object.assign({}, inputRow);
+    const outputRow = Object.assign({}, inputRow);
     //
     // TODO: Your code here to fix the row of data.
     //
@@ -26,7 +26,7 @@ function transformData (inputData) {
 
 importCsvFile(inputFileName)
     .then(inputData => {
-        var outputData = transformData(inputData);
+        const outputData = transformData(inputData);
         return exportCsvFile(outputFileName, outputData);
     })
     .then(() => {

@@ -6,9 +6,9 @@
 
 'use strict';
 
-var dataForge = require('data-forge');
+const dataForge = require('data-forge');
 
-var inputFileName = './data/surveys.csv';
+const inputFileName = './data/surveys.csv';
 
 function filterRow (inputRow, country) {
     return inputRow.country === country;
@@ -30,11 +30,11 @@ function splitDataByCountry (inputDataFrame) {
     return getCountries(inputDataFrame)
         .aggregate(Promise.resolve(), (prevPromise, country) => {
             return prevPromise.then(() => {
-                var outputDataFrame = transformData(
+                const outputDataFrame = transformData(
                         inputDataFrame, 
                         country
                     );
-                var outputFileName = './output/by-country/' + 
+                const outputFileName = './output/by-country/' + 
                     country + '.csv';
                 console.log('>> ' + outputFileName);
                 return outputDataFrame

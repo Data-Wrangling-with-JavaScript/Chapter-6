@@ -4,14 +4,14 @@
 
 'use strict';
 
-var importCsvFile = require('./toolkit/importCsvFile.js');
-var exportCsvFile = require('./toolkit/exportCsvFile.js');
+const importCsvFile = require('./toolkit/importCsvFile.js');
+const exportCsvFile = require('./toolkit/exportCsvFile.js');
 
-var inputFileName = './data/surveys.csv';
-var outputFileName = './output/surveys-with-no-reef_type.csv';
+const inputFileName = './data/surveys.csv';
+const outputFileName = './output/surveys-with-no-reef_type.csv';
 
 function transformRow (inputRow) {
-    var outputRow = Object.assign({}, inputRow);
+    const outputRow = Object.assign({}, inputRow);
     delete outputRow.reef_type;
     return outputRow;      
 }
@@ -22,7 +22,7 @@ function transformData (inputData) {
 
 importCsvFile(inputFileName)
     .then(inputData => {
-        var outputData = transformData(inputData);
+        const outputData = transformData(inputData);
         return exportCsvFile(outputFileName, outputData)
     })
     .then(() => {
