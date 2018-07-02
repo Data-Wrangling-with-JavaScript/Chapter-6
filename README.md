@@ -5,3 +5,10 @@ If you're a JavaScript developer, you already know that working with data is a b
 This repository contains code examples for Chapter 6 (*Clean and prepare*) of [Data Wrangling with JavaScript](http://bit.ly/2t2cJu2).
 
 This repository contains simple examples of JavaScript / Node.js code for cleaning up and preparing data.
+
+## Resources
+
+- [Data Wrangling with JavaScript](http://bit.ly/2t2cJu2)
+- [The Data Wrangler](http://www.the-data-wrangler.com/)
+- [Data-Forge](http://www.data-forge-js.com/)
+- [Data-Forge Notebook](http://data-forge-notebook.com/)
