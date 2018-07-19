@@ -4,11 +4,12 @@
 // This example uses Data-Forge.
 //
 
-'use strict';
+"use strict";
 
 const dataForge = require('data-forge');
-const inputFileName = './data/surveys.csv';
-const outputFileName = './output/surveys-with-no-reef_type-using-data-forge.csv';
+
+const inputFileName = "./data/surveys.csv";
+const outputFileName = "./output/surveys-with-no-reef_type-using-data-forge.csv";
 
 function transformData (inputDataFrame) {
     return inputDataFrame.dropSeries("reef_type");
@@ -24,9 +25,9 @@ dataForge.readFile(inputFileName)
             .writeFile(outputFileName);
     })
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
+        console.error("Error!");
         console.error(err && err.stack || err);
     });

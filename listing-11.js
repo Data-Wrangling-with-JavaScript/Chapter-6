@@ -4,11 +4,11 @@
 // This example uses Data-Forge.
 //
 
-'use strict';
+"use strict";
 
 const dataForge = require('data-forge');
 
-const inputFileName = './data/surveys.csv';
+const inputFileName = "./data/surveys.csv";
 
 function filterRow (inputRow, country) {
     return inputRow.country === country;
@@ -34,9 +34,9 @@ function splitDataByCountry (inputDataFrame) {
                         inputDataFrame, 
                         country
                     );
-                const outputFileName = './output/by-country/' + 
-                    country + '.csv';
-                console.log('>> ' + outputFileName);
+                const outputFileName = "./output/by-country/" + 
+                    country + ".csv";
+                console.log(">> " + outputFileName);
                 return outputDataFrame
                     .asCSV()
                     .writeFile(outputFileName);
@@ -48,9 +48,9 @@ dataForge.readFile(inputFileName)
     .parseCSV()
     .then(splitDataByCountry)
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
+        console.error("Error!");
         console.error(err && err.stack || err);
     });

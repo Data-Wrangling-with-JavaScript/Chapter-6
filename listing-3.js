@@ -5,14 +5,14 @@
 // This example uses Data-Forge.
 //
 
-'use strict';
+"use strict";
 
 const moment = require('moment');
 const dataForge = require('data-forge');
 
 const importDateFormat = "YYYY-MM-DD HH:mm";
-const inputFileName = './data/surveys.csv';
-const outputFileName = './output/surveys-with-fixed-dates-using-data-forge.csv';
+const inputFileName = "./data/surveys.csv";
+const outputFileName = "./output/surveys-with-fixed-dates-using-data-forge.csv";
 
 function parseDate (inputDate, timezoneOffset) {
     return moment(inputDate, importDateFormat).utcOffset(timezoneOffset).toDate();
@@ -38,9 +38,9 @@ dataForge.readFile(inputFileName)
             .writeFile(outputFileName);
     })
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
+        console.error("Error!");
         console.error(err && err.stack || err);
     });

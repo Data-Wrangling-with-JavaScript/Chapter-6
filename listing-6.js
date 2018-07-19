@@ -6,14 +6,15 @@
 // This example uses Data-Forge.
 //
 
-'use strict';
+"use strict";
 
 const dataForge = require('data-forge');
-const inputFileName = './data/surveys.csv';
-const outputFileName = './output/surveys-but-only-Australia-using-data-forge.csv';
+
+const inputFileName = "./data/surveys.csv";
+const outputFileName = "./output/surveys-but-only-Australia-using-data-forge.csv";
 
 function filterRow (inputRow) {
-    return inputRow.country === 'Australia';
+    return inputRow.country === "Australia";
 }
 
 function transformData (inputDataFrame) {
@@ -30,9 +31,9 @@ dataForge.readFile(inputFileName)
             .writeFile(outputFileName);
     })
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
+        console.error("Error!");
         console.error(err && err.stack || err);
     });

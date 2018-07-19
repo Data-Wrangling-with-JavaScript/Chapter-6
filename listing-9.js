@@ -4,11 +4,11 @@
 // This example uses Data-Forge.
 //
 
-'use strict';
+"use strict";
 
 const dataForge = require('data-forge');
-const inputFileName = './data/surveys.csv';
-const outputFileName = './output/surveys-aggregated.csv';
+const inputFileName = "./data/surveys.csv";
+const outputFileName = "./output/surveys-aggregated.csv";
 
 function transformData (inputDataFrame) {
     return inputDataFrame
@@ -18,7 +18,7 @@ function transformData (inputDataFrame) {
             return {
                 reef_name: group.first().reef_name,
                 transects_length: group
-                    .select(row => row.transects_length)
+                    .deflate(row => row.transects_length)
                     .sum(),
             };
         })
@@ -34,9 +34,9 @@ dataForge.readFile(inputFileName)
             .writeFile(outputFileName);
     })
     .then(() => {
-        console.log('Done!');
+        console.log("Done!");
     })
     .catch(err => {
-        console.error('Error!');
+        console.error("Error!");
         console.error(err && err.stack || err);
     });

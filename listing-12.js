@@ -3,14 +3,14 @@
 //
 
 
-'use strict';
+"use strict";
 
 const dataForge = require('data-forge');
 const moment = require('moment');
 
 const importDateFormat = "YYYY-MM-DD HH:mm:ss";
-const inputFileName = './data/surveys.csv';
-const outputFileName = './output/data-pipeline-output.csv';
+const inputFileName = "./data/surveys.csv";
+const outputFileName = "./output/data-pipeline-output.csv";
 
 dataForge.readFile(inputFileName)
     .parseCSV()
@@ -35,7 +35,7 @@ dataForge.readFile(inputFileName)
             .select(group => ({
                 country: group.first().country,
                 dive_temperature: group
-                    .select(row => row.dive_temperature)
+                    .deflate(row => row.dive_temperature)
                     .average()
             }))
             .inflate()
